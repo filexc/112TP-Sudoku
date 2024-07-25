@@ -3,12 +3,10 @@ from Cell import *
 
 class SudokuBoard:
     def __init__(self, board):
-        # initialize each cell of the board with cell objects
+        self.board = board
         for row in range(len(board)):
             for col in range(len(board[row])):
-                board[row][col] = Cell(board[row][col])
-        self.board = board
-        pass
+                self.board[row][col] = Cell(board[row][col])
 
     def drawBoard(self, app):
         for row in range(len(self.board)):

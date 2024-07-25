@@ -1,5 +1,6 @@
 from cmu_graphics import *
 from SudokuBoard import *
+from options import *
 
 def play_onAppStart(app):
     pass
@@ -21,6 +22,7 @@ def play_onScreenActivate(app):
     
 def play_redrawAll(app):
     app.selectedBoard.drawBoard(app)
+    drawSelections(app) # TODO: make selections clickable
 
 def play_onMousePress(app, mouseX, mouseY):
-    pass
+    setActiveScreen('help')
