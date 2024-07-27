@@ -1,4 +1,5 @@
 from cmu_graphics import *
+import math
 
 class Cell:
     def __init__(self, value):
@@ -9,7 +10,12 @@ class Cell:
     def drawCell(self, app, row, col):
         cellLeft, cellTop = self.getCellLeftTop(app, row, col)
         cellWidth, cellHeight = self.getCellSize(app)
-        color = 'gray' if self.permanent else None
+        if self.permanent:
+            color = 'gray'
+        elif app.selection == (row, col):
+            color = 'red'
+        else:
+            color = None
         drawRect(cellLeft, cellTop, cellWidth, cellHeight, fill=color, 
                  border='black', borderWidth=app.cellBorderWidth)
         if self.value != None:
@@ -21,6 +27,18 @@ class Cell:
         cellLeft = app.boardLeft + col * cellWidth
         cellTop = app.boardTop + row * cellHeight
         return (cellLeft, cellTop)
+    
+    @staticmethod
+    def getCell(app, x, y):
+        dx = x - app.boardLeft
+        dy = y - app.boardTop
+        cellWidth, cellHeight = Cell.getCellSize(app)
+        row = math.floor(dy / cellHeight)
+        col = math.floor(dx / cellWidth)
+        if (0 <= row < app.rows) and (0 <= col < app.cols):
+            return (row, col)
+        else:
+            return None
 
     @staticmethod
     def getCellSize(app):

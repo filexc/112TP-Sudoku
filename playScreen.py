@@ -4,7 +4,8 @@ from options import *
 import random
 
 def play_onAppStart(app):
-    pass
+    app.selection = None
+    app.nums = [[1,2,3],[4,5,6],[7,8,9]]
 
 def play_onScreenActivate(app):
     selectBoard(app)
@@ -13,11 +14,27 @@ def play_onScreenActivate(app):
     
 def play_redrawAll(app):
     app.selectedBoard.drawBoard(app)
-    drawSelections(app) # TODO: make selections clickable
+    drawSelections(app)
 
 def play_onMousePress(app, mouseX, mouseY):
     if 600 <= mouseX <= 850 and 510 <= mouseY <= 550:
         setActiveScreen('help')
+    if Cell.getCell(app, mouseX, mouseY) != None:
+        selectedCell = Cell.getCell(app, mouseX, mouseY)
+        row, col = selectedCell
+        if app.selectedBoard.board[row][col].permanent == False:
+            app.selection = selectedCell
+    if getNum(app, mouseX, mouseY) != None and app.selection != None:
+        row, col = app.selection
+        app.selectedBoard.board[row][col].value = getNum(app, mouseX, mouseY)
+
+def play_onKeyPress(app, key):
+    if app.selection != None:
+        val = None
+        for _ in range(1, 10):
+            val = key
+        row, col = app.selection
+        app.selectedBoard.board[row][col].value = val
 
 def selectBoard(app):
     if app.level == 'easy' or app.level == 'medium' or app.level == 'hard':
