@@ -1,22 +1,13 @@
 from cmu_graphics import *
 from SudokuBoard import *
 from options import *
+import random
 
 def play_onAppStart(app):
     pass
 
 def play_onScreenActivate(app):
-    # app.selectedBoard = [list(range(9)) for _ in range(9)]
-    #hard coded dummy board for testing purposes -- not a legal board
-    app.selectedBoard = [[1, 5, 2, 4, 6, None, None, 2, 9], 
-                         [None, None, None, 3, 5, 7, 8, 9, 1],
-                         [7, None, 1, 4, None, 5, 9, None, 3],
-                         [1, 5, 2, 4, 6, None, None, 2, 9],
-                         [None, None, None, 3, 5, 7, 8, 9, 1],
-                         [7, None, 1, 4, None, 5, 9, None, 3],
-                         [1, 5, 2, 4, 6, None, None, 2, 9],
-                         [None, None, None, 3, 5, 7, 8, 9, 1],
-                         [7, None, 1, 4, None, 5, 9, None, 3]]
+    selectBoard(app)
     app.selectedBoard = SudokuBoard(app.selectedBoard)
     app.background = 'seashell'
     
@@ -25,4 +16,28 @@ def play_redrawAll(app):
     drawSelections(app) # TODO: make selections clickable
 
 def play_onMousePress(app, mouseX, mouseY):
-    setActiveScreen('help')
+    if 600 <= mouseX <= 850 and 510 <= mouseY <= 550:
+        setActiveScreen('help')
+
+def selectBoard(app):
+    if app.level == 'easy' or app.level == 'medium' or app.level == 'hard':
+        rand = random.randint(1, 50)
+    else:
+        rand = random.randint(1, 25)
+    if rand < 10:
+        rand = '0' + str(rand)
+    else:
+        rand = str(rand)
+    board = readFile(f'boards/{app.level}-{rand}.png.txt')
+    res = []
+    for line in board.splitlines():
+        row = []
+        for num in line.split(' '):
+            row.append(int(num))
+        res.append(row)
+    app.selectedBoard = res
+
+# taken from tp resources
+def readFile(path):
+    with open(path, "rt") as f:
+        return f.read()

@@ -2,7 +2,7 @@ from cmu_graphics import *
 
 class Cell:
     def __init__(self, value):
-        self.value = value
+        self.value = value if value != 0 else None
         self.permanent = True if self.value != None else False
         #TODO: need a correct value, candidates displayed, and legals property
     

@@ -2,6 +2,7 @@ from cmu_graphics import *
 from welcomeScreen import *
 from playScreen import *
 from helpScreen import *
+from levelSelectionScreen import *
 
 def onAppStart(app):
     app.rows = 9

@@ -34,4 +34,4 @@ def drawPlayButton(app):
 def welcome_onMousePress(app, mouseX, mouseY):
     if ((app.width/2 + 110 > mouseX > app.width/2 - 110) and 
         (450 < mouseY < 510)):
-         setActiveScreen('play')
+         setActiveScreen('levels')
