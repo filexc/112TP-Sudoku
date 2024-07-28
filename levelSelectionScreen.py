@@ -4,9 +4,6 @@ def levels_onAppStart(app):
     app.level = None
     app.labels = ['easy', 'medium', 'hard', 'expert', 'evil']
 
-def levels_onScreenActivate(app):
-    pass
-
 def levels_redrawAll(app):
     drawRect(50, 50, app.width - 100, app.height - 100, fill=app.welcomeBGColor)
     drawLabel('Choose Level', app.width/2, 110, size=60, 

@@ -1,5 +1,6 @@
 from cmu_graphics import *
 import math
+
 def drawSelections(app):
     left = app.boardLeft + app.boardWidth + 50
     top = app.boardTop + 60

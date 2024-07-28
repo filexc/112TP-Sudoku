@@ -1,6 +1,7 @@
 from cmu_graphics import *
 from SudokuBoard import *
 from options import *
+
 import random
 
 def play_onAppStart(app):
@@ -34,7 +35,7 @@ def play_onKeyPress(app, key):
         for _ in range(1, 10):
             val = key
         row, col = app.selection
-        app.selectedBoard.board[row][col].value = val
+        app.selectedBoard.board[row][col].value = int(val)
 
 def selectBoard(app):
     if app.level == 'easy' or app.level == 'medium' or app.level == 'hard':

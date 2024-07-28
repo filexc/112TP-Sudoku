@@ -3,6 +3,8 @@ from Cell import *
 
 class SudokuBoard:
     def __init__(self, board):
+        self.rows = 9
+        self.cols = 9
         self.board = board
         for row in range(len(board)):
             for col in range(len(board[row])):

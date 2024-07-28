@@ -1,21 +1,30 @@
 from cmu_graphics import *
+from legality import *
 import math
 
 class Cell:
     def __init__(self, value):
         self.value = value if value != 0 else None
         self.permanent = True if self.value != None else False
+        self.row = None
+        self.col = None
         #TODO: need a correct value, candidates displayed, and legals property
     
     def drawCell(self, app, row, col):
-        cellLeft, cellTop = self.getCellLeftTop(app, row, col)
+        self.row, self.col = row, col
+        cellLeft, cellTop = self.getCellLeftTop(app, self.row, self.col)
         cellWidth, cellHeight = self.getCellSize(app)
+        color = None
         if self.permanent:
             color = 'gray'
-        elif app.selection == (row, col):
-            color = 'red'
-        else:
-            color = None
+        elif self.value != None:
+            if not isLegal(app.selectedBoard, self, self.value):
+                color = 'red'
+        if color == None:
+            if app.selection == (self.row, self.col):
+                color = 'yellow'
+            else:
+                color = None
         drawRect(cellLeft, cellTop, cellWidth, cellHeight, fill=color, 
                  border='black', borderWidth=app.cellBorderWidth)
         if self.value != None:
