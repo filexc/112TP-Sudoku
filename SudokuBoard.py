@@ -28,3 +28,10 @@ class SudokuBoard:
             drawLine(app.boardLeft, app.boardTop + cellHeight * v, 
                      app.boardLeft + app.boardWidth, (app.boardTop + cellHeight
                      * v), lineWidth=4 * app.cellBorderWidth)
+            
+    def gameIsOver(self, app):
+        for row in range(len(self.board)):
+            for col in range(len(self.board[row])):
+                if self.board[row][col].value == None:
+                    return False
+        return True

@@ -3,6 +3,7 @@ from welcomeScreen import *
 from playScreen import *
 from helpScreen import *
 from levelSelectionScreen import *
+from gameOverScreen import *
 
 def onAppStart(app):
     app.rows = 9
