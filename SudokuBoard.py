@@ -8,11 +8,13 @@ class SudokuBoard:
         self.board = board
         for row in range(len(board)):
             for col in range(len(board[row])):
-                self.board[row][col] = Cell(board[row][col])
+                self.board[row][col] = Cell(board[row][col], row, col)
 
     def drawBoard(self, app):
         for row in range(len(self.board)):
             for col in range(len(self.board[row])):
+                self.board[row][col].row = row
+                self.board[row][col].col = col
                 self.board[row][col].drawCell(app, row, col)
         SudokuBoard.drawBoardBorders(app)
 

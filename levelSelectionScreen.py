@@ -23,6 +23,9 @@ def levels_onMousePress(app, mouseX, mouseY):
                 app.level = app.labels[i]
                 selectBoard(app)
                 app.selectedBoard = SudokuBoard(app.selectedBoard)
+                for row in range(app.selectedBoard.rows):
+                    for col in range(app.selectedBoard.cols):
+                        app.selectedBoard.board[row][col].resetLegals(app.selectedBoard)
                 setActiveScreen('play')
 
 def drawButtons(app):
