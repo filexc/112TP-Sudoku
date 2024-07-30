@@ -14,8 +14,8 @@ class SudokuBoard:
             for col in range(self.cols):
                 self.board[row][col].resetLegals(self)
         self.sol = self.solveBoard(self.board)
-        for line in self.sol:
-            print(line)
+        # for line in self.sol: # TODO: prints the generated solution for testing purposes
+        #     print(line)
 
     def drawBoard(self, app):
         for row in range(len(self.board)):

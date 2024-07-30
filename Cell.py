@@ -61,6 +61,8 @@ class Cell:
         return (cellWidth, cellHeight)
     
     def resetLegals(self, board):
+        if isinstance(board, SudokuBoard.SudokuBoard):
+            board = board.board
         self.userCandidates = (self.userCandidates if app.candidateMode == 
                                'Manual' else self.legals)
         #TODO: figure out how to only create the duplicate once for candidates
@@ -68,10 +70,7 @@ class Cell:
         #      auto update
         self.legals.clear()
         for i in range (1, 10):
-            if isinstance(board, SudokuBoard.SudokuBoard):
-                if isLegal(board.board, self, i):
-                    self.legals.append(i)
-            elif isLegal(board, self, i):
+            if isLegal(board, self, i):
                 self.legals.append(i)
     
     def displayLegals(self, app, row, col):
