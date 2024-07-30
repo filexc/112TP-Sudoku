@@ -1,4 +1,5 @@
 from cmu_graphics import *
+import SudokuBoard
 from legality import *
 import math
 
@@ -20,7 +21,7 @@ class Cell:
         if self.permanent:
             color = 'gray'
         elif self.value != None:
-            if not isLegal(app.selectedBoard, self, self.value):
+            if not isLegal(app.selectedBoard.board, self, self.value):
                 color = 'red'
         if color == None:
             if app.selection == (self.row, self.col):
@@ -67,7 +68,10 @@ class Cell:
         #      auto update
         self.legals.clear()
         for i in range (1, 10):
-            if isLegal(board, self, i):
+            if isinstance(board, SudokuBoard.SudokuBoard):
+                if isLegal(board.board, self, i):
+                    self.legals.append(i)
+            elif isLegal(board, self, i):
                 self.legals.append(i)
     
     def displayLegals(self, app, row, col):
@@ -79,3 +83,6 @@ class Cell:
             if num + 1 in self.userCandidates:
                 drawLabel(num + 1, cellLeft + 8 + 20 * (num % 3), 
                           cellTop + 11 + 18 * (num//3), font='Canela Text')
+                
+    def __repr__(self):
+        return f'{self.value}'
