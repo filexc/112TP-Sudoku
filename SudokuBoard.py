@@ -14,7 +14,8 @@ class SudokuBoard:
             for col in range(self.cols):
                 self.board[row][col].resetLegals(self)
         self.sol = self.solveBoard(self.board)
-        print(self.sol)
+        for line in self.sol:
+            print(line)
 
     def drawBoard(self, app):
         for row in range(len(self.board)):
@@ -51,46 +52,42 @@ class SudokuBoard:
     def backtracker(self, board):
         cellWithSmallestLegals = self.findSmallestLegals(board)
         row, col, legals = cellWithSmallestLegals
-        if cellWithSmallestLegals == (None, None, None) or (row, col) == (None, None):
+        if cellWithSmallestLegals == (None, None, None):
             return board
-        if legals == None:
-            return None
         for val in legals:
             board[row][col].value = val
             oldLegals = board[row][col].legals
-            # self.resetBoardLegals(board)
-            # for r in range(len(board)):
-            #     for c in range(len(board[row])):
-            #         board[r][c].resetLegals(board)
-            # board[row][col].resetLegals(board)
-
+            self.resetBoardLegals(board, row, col)
             posSol = self.backtracker(board)
             if posSol != None:
                 return posSol
-            
-            board[row][col] = None
+            board[row][col].value = None
             board[row][col].legals = oldLegals
-            # self.resetBoardLegals(board)
-            # for r in range(len(board)):
-            #     for c in range(len(board[row])):
-            #         board[r][c].resetLegals(board)
+            self.resetBoardLegals(board, row, col)
         return None
         
     def findSmallestLegals(self, board):
         smallestRow, smallestCol = None, None
         smallestLegals = None
         for row in range(len(board)):
-            if smallestLegals != None and len(smallestLegals) == 1:
-                break
             for col in range(len(board[row])):
                 if board[row][col].value == None:
                     if smallestLegals == None or (len(smallestLegals) == 1 or 
                         len(board[row][col].legals) < len(smallestLegals)):
                         smallestRow, smallestCol = row, col
                         smallestLegals = board[row][col].legals
+                        if len(smallestLegals) == 1:
+                            return smallestRow, smallestCol, smallestLegals
         return smallestRow, smallestCol, smallestLegals
     
-    def resetBoardLegals(self, board):
-        for row in range(len(board)):
-            for col in range(len(board[row])):
-                board[row][col].resetLegals(board)
+    def resetBoardLegals(self, board, row, col):
+        blockStartRow = row//3 * 3
+        blockStartCol = col//3 * 3
+
+        for c in range(len(board[row])):
+            board[row][c].resetLegals(board)
+        for r in range(len(board)):
+            board[r][col].resetLegals(board)
+        for r in range(blockStartRow, blockStartRow + 3):
+            for c in range(blockStartCol, blockStartCol + 3):
+                board[r][c].resetLegals(board)

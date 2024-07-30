@@ -45,7 +45,6 @@ def selectBoard(app):
     else:
         rand = str(rand)
     board = readFile(f'boards/{app.level}-{rand}.png.txt')
-    board = readFile('boards/easy-01.png.txt') #TODO: temp
     res = []
     for line in board.splitlines():
         row = []
