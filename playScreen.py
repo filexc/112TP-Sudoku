@@ -1,3 +1,4 @@
+import time
 from cmu_graphics import *
 from SudokuBoard import *
 from options import *
@@ -11,6 +12,9 @@ def play_onAppStart(app):
     app.mode = 'Normal'
     app.candidateMode = 'Manual'
     app.autocorrect = False
+    app.popupError = False
+    app.firstTimeInState = True
+    app.initTime = None
 
 def play_onScreenActivate(app):
     app.background = 'seashell'
@@ -24,6 +28,17 @@ def play_onStep(app):
     app.gameOver = app.selectedBoard.gameIsOver(app)
     if app.gameOver: # also if the board is the correct solution but do that later
         setActiveScreen('endgame')
+    # found time class/method online on 
+    # https://www.geeksforgeeks.org/python-time-time-method/, 
+    # but didn't look at code
+    if app.popupError:
+        if app.firstTimeInState:
+            app.initTime = time.time()
+            app.firstTimeInState = False
+        if time.time() - 2.5 >= app.initTime:
+            app.popupError = False
+            app.firstTimeInState = True
+            app.initTime = None
 
 def play_onMousePress(app, mouseX, mouseY):
     board = app.selectedBoard.board
@@ -56,12 +71,6 @@ def play_onKeyPress(app, key):
                     app.hintStep = None
                     app.highlighted = None
                 adjustLegals(app.selectedBoard)
-    skipToEnd(app, key)
-    
-#TODO: get rid of but for now TEMP FOR TESTING GAME OVER/REPLAY MODES
-def skipToEnd(app, key):
-    if key == 's':
-        setActiveScreen('endgame')
 
 def adjustLegals(board):
     for row in range(board.rows):
@@ -124,6 +133,8 @@ def clickHintButton(app, mouseX, mouseY, board):
                 row, col = app.selectedBoard.findOnlyOneLegalHint(board)
                 app.highlighted = board[row][col]
                 app.hintStep = 'Highlighted'
+            else:
+                app.popupError = True
         elif app.hintStep == 'Highlighted':
             row, col = app.highlighted.row, app.highlighted.col
             board[row][col].value = board[row][col].correct.value
@@ -135,7 +146,10 @@ def drawHintButton(app):
     left = app.boardLeft + app.boardWidth + 50
     width = 250
     drawRect(left, 473, width, 40, fill='lightGray', border='gray')
-    if app.hintStep == None:
+    if app.popupError:
+        drawLabel('No hint currently available', left + width/2, 493, size=16, 
+                  font='Canela Text', fill='red')
+    elif app.hintStep == None:
         drawLabel('Get Hint', left + width/2, 493, size=16, font='Canela Text')
     elif app.hintStep == 'Highlighted':
         drawLabel('Apply Hint', left + width/2, 493, size=16, font='Canela Text')

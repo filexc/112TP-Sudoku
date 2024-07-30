@@ -35,3 +35,8 @@ def welcome_onMousePress(app, mouseX, mouseY):
     if ((app.width/2 + 110 > mouseX > app.width/2 - 110) and 
         (450 < mouseY < 510)):
          setActiveScreen('levels')
+
+#TODO: get rid of
+def welcome_onKeyPress(app, key):
+    if key == 's':
+        setActiveScreen('help')

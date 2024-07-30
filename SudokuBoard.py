@@ -44,7 +44,8 @@ class SudokuBoard:
     def gameIsOver(self, app):
         for row in range(len(self.board)):
             for col in range(len(self.board[row])):
-                if self.board[row][col].value == None:
+                cell = self.board[row][col]
+                if (cell.value == None or cell.value != cell.correct.value):
                     return False
         return True
     

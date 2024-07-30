@@ -22,12 +22,16 @@ class Cell:
         incorrect = False
         if self.permanent:
             color = 'gray'
-        # make this to be a color thats for both
-        elif app.highlighted != None and (app.highlighted.row, app.highlighted.col) == (self.row, self.col):
+        elif (app.highlighted != None and (app.highlighted.row, app.highlighted.
+                                          col) == (self.row, self.col) and app.
+                                          selection == (self.row, self.col)):
+            color = rgb(128, 192, 0)
+        elif (app.highlighted != None and (app.highlighted.row, app.highlighted.
+                                          col) == (self.row, self.col)):
             color = 'green'
         elif app.selection == (self.row, self.col):
             color = 'yellow'
-        if self.value != self.correct.value: # TODO: make this a toggle
+        if self.value != self.correct.value:
             incorrect = True
         if not isLegal(app.selectedBoard.board, self, self.value):
             illegal = True

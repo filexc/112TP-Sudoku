@@ -16,7 +16,7 @@ def onAppStart(app):
     app.cellBorderWidth = 1
 
 def main():
-    # learned how to do from TP Resources
+    # learned how to do from TP Resourcesa
     runAppWithScreens(initialScreen='welcome', width=900, height=600)
 
 main()
