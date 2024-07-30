@@ -9,6 +9,8 @@ def levels_onAppStart(app):
 def levels_onScreenActivate(app):
     app.level = None
     app.selection = None
+    app.hintStep = None
+    app.highlighted = None
 
 def levels_redrawAll(app):
     drawRect(50, 50, app.width - 100, app.height - 100, fill=app.welcomeBGColor)

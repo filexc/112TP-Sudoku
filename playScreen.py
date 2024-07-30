@@ -10,6 +10,7 @@ def play_onAppStart(app):
     app.gameOver = False
     app.mode = 'Normal'
     app.candidateMode = 'Manual'
+    app.autocorrect = False
 
 def play_onScreenActivate(app):
     app.background = 'seashell'
@@ -17,6 +18,7 @@ def play_onScreenActivate(app):
 def play_redrawAll(app):
     app.selectedBoard.drawBoard(app)
     drawSelections(app)
+    drawHintButton(app)
 
 def play_onStep(app):
     app.gameOver = app.selectedBoard.gameIsOver(app)
@@ -24,36 +26,19 @@ def play_onStep(app):
         setActiveScreen('endgame')
 
 def play_onMousePress(app, mouseX, mouseY):
-    board = app.selectedBoard
+    board = app.selectedBoard.board
     if 600 <= mouseX <= 850 and 510 <= mouseY <= 550:
         setActiveScreen('help')
-    if Cell.getCell(app, mouseX, mouseY) != None:
-        selectedCell = Cell.getCell(app, mouseX, mouseY)
-        row, col = selectedCell
-        if board.board[row][col].permanent == False:
-            app.selection = selectedCell
-    num = getNum(app, mouseX, mouseY)
-    if num != None and app.selection != None:
-        row, col = app.selection
-        if app.mode == 'Normal':
-          board.board[row][col].value = num
-        elif app.mode == 'Candidate':
-            if (num not in board.board[row][col].userCandidates):
-                board.board[row][col].userCandidates.append(num)
-            else:
-                board.board[row][col].userCandidates.remove(num)
-        adjustLegals(app.selectedBoard)
-    if 50 <= mouseY <= 90:
-        if 600 <= mouseX <= 725: # don't currently know the conditions
-            app.mode = 'Normal'
-        elif 725 <= mouseX <= 850:
-            app.mode = 'Candidate'
-    if 600 <= mouseX <= 620 and 390 <= mouseY <= 420:
-        app.candidateMode = 'Automatic' if app.candidateMode == 'Manual' else 'Manual'
-        updateCandidates(app)
+    selectCell(app, board, mouseX, mouseY)
+    useNumPad(app, board, mouseX, mouseY)
+    changeGameMode(app, mouseX, mouseY)
+    toggleCandidateMode(app, mouseX, mouseY)
+    toggleAutocorrect(app, mouseX, mouseY)
+    clickHintButton(app, mouseX, mouseY, board)
+
 
 def play_onKeyPress(app, key):
-    board = app.selectedBoard
+    board = app.selectedBoard.board
     if app.selection != None:
         val = None
         for i in range(1, 10):
@@ -61,12 +46,15 @@ def play_onKeyPress(app, key):
                 val = key
                 row, col = app.selection
                 if app.mode == 'Normal':
-                    board.board[row][col].value = int(val)
+                    board[row][col].value = int(val)
                 elif app.mode == 'Candidate':
-                    if (int(val) not in board.board[row][col].userCandidates):
-                        board.board[row][col].userCandidates.append(int(val))
+                    if (int(val) not in board[row][col].userCandidates):
+                        board[row][col].userCandidates.append(int(val))
                     else:
-                        board.board[row][col].userCandidates.remove(int(val))
+                        board[row][col].userCandidates.remove(int(val))
+                if app.highlighted == board[row][col]:
+                    app.hintStep = None
+                    app.highlighted = None
                 adjustLegals(app.selectedBoard)
     skipToEnd(app, key)
     
@@ -89,3 +77,65 @@ def updateCandidates(app):
             else:
                 board.board[row][col].userCandidates = (board.board[row][col]
                                                         .legals)
+                
+def selectCell(app, board, mouseX, mouseY):
+    if Cell.getCell(app, mouseX, mouseY) != None:
+        selectedCell = Cell.getCell(app, mouseX, mouseY)
+        row, col = selectedCell
+        if board[row][col].permanent == False:
+            app.selection = selectedCell
+
+def useNumPad(app, board, mouseX, mouseY):
+    num = getNum(app, mouseX, mouseY)
+    if num != None and app.selection != None:
+        row, col = app.selection
+        if app.mode == 'Normal':
+          board[row][col].value = num
+        elif app.mode == 'Candidate':
+            if (num not in board[row][col].userCandidates):
+                board[row][col].userCandidates.append(num)
+            else:
+                board[row][col].userCandidates.remove(num)
+        if app.highlighted == board[row][col]:
+            app.hintStep = None
+            app.highlighted = None
+        adjustLegals(app.selectedBoard)
+
+def changeGameMode(app, mouseX, mouseY):
+    if 50 <= mouseY <= 90:
+        if 600 <= mouseX <= 725:
+            app.mode = 'Normal'
+        elif 725 <= mouseX <= 850:
+            app.mode = 'Candidate'
+        
+def toggleCandidateMode(app, mouseX, mouseY):
+    if 600 <= mouseX <= 620 and 390 <= mouseY <= 420:
+        app.candidateMode = 'Automatic' if app.candidateMode == 'Manual' else 'Manual'
+        updateCandidates(app)
+
+def toggleAutocorrect(app, mouseX, mouseY):
+    if 600 <= mouseX <= 620 and 440 <= mouseY <= 470:
+        app.autocorrect = not app.autocorrect
+
+def clickHintButton(app, mouseX, mouseY, board):
+    if 600 <= mouseX <= 850 and 473 <= mouseY <= 513:
+        if app.hintStep == None:
+            if app.selectedBoard.findOnlyOneLegalHint(board) != None:
+                row, col = app.selectedBoard.findOnlyOneLegalHint(board)
+                app.highlighted = board[row][col]
+                app.hintStep = 'Highlighted'
+        elif app.hintStep == 'Highlighted':
+            row, col = app.highlighted.row, app.highlighted.col
+            board[row][col].value = board[row][col].correct.value
+            app.selectedBoard.resetBoardLegals(board, row, col)
+            app.hintStep = None
+            app.highlighted = None
+
+def drawHintButton(app):
+    left = app.boardLeft + app.boardWidth + 50
+    width = 250
+    drawRect(left, 473, width, 40, fill='lightGray', border='gray')
+    if app.hintStep == None:
+        drawLabel('Get Hint', left + width/2, 493, size=16, font='Canela Text')
+    elif app.hintStep == 'Highlighted':
+        drawLabel('Apply Hint', left + width/2, 493, size=16, font='Canela Text')

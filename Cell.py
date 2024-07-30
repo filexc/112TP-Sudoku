@@ -11,29 +11,38 @@ class Cell:
         self.col = col
         self.legals = []
         self.userCandidates = []
-        #TODO: need a correct value
+        self.correct = None
     
     def drawCell(self, app, row, col):
         self.row, self.col = row, col
         cellLeft, cellTop = self.getCellLeftTop(app, self.row, self.col)
         cellWidth, cellHeight = self.getCellSize(app)
         color = None
+        illegal = False
+        incorrect = False
         if self.permanent:
             color = 'gray'
-        elif self.value != None:
-            if not isLegal(app.selectedBoard.board, self, self.value):
-                color = 'red'
-        if color == None:
-            if app.selection == (self.row, self.col):
-                color = 'yellow'
-            else:
-                color = None
+        # make this to be a color thats for both
+        elif app.highlighted != None and (app.highlighted.row, app.highlighted.col) == (self.row, self.col):
+            color = 'green'
+        elif app.selection == (self.row, self.col):
+            color = 'yellow'
+        if self.value != self.correct.value: # TODO: make this a toggle
+            incorrect = True
+        if not isLegal(app.selectedBoard.board, self, self.value):
+            illegal = True
         drawRect(cellLeft, cellTop, cellWidth, cellHeight, fill=color, 
                  border='black', borderWidth=app.cellBorderWidth)
         if self.value != None:
             drawLabel(self.value, cellLeft + cellWidth/2, (cellTop + 
                       cellHeight/2), size=16, font='Canela Text')
-        if self.value == None:
+            if illegal:
+                drawCircle(cellLeft + cellWidth - 10, cellTop + cellHeight - 10,
+                           5, fill='red')
+            if incorrect and app.autocorrect:
+                drawLine(cellLeft + cellWidth, cellTop, cellLeft, cellTop + 
+                         cellHeight, fill='red')
+        else:
             self.displayLegals(app, row, col)
 
     def getCellLeftTop(self, app, row, col):
@@ -81,7 +90,8 @@ class Cell:
         for num in range(9):
             if num + 1 in self.userCandidates:
                 drawLabel(num + 1, cellLeft + 8 + 20 * (num % 3), 
-                          cellTop + 11 + 18 * (num//3), font='Canela Text')
+                          cellTop + 11 + 18 * (num//3), font='Canela Text', 
+                          fill='gray')
                 
     def __repr__(self):
         return f'{self.value}'

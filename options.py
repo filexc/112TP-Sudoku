@@ -10,6 +10,7 @@ def drawSelections(app):
     drawNumSquares(left, top, size)
     drawHelpButton(app, left, size)
     drawCandidateModeCheckbox(app, left)
+    drawAutocorrectModeCheckbox(app, left)
     
 def drawHeadings(app, left, width):
     if app.mode == 'Candidate':
@@ -58,4 +59,14 @@ def drawCandidateModeCheckbox(app, left):
         drawLabel(chr(0x2611), left + 10, 400, size=24, 
                   font='Noto Sans Symbols 2')
     drawLabel('Auto Candidate Mode', left + 110, 400, size=16,
+              font='Canela Text')
+    
+def drawAutocorrectModeCheckbox(app, left):
+    if not app.autocorrect:
+        drawLabel(chr(0x2610), left + 10, 450, size=24, 
+                  font='Noto Sans Symbols 2')
+    elif app.autocorrect:
+        drawLabel(chr(0x2611), left + 10, 450, size=24, 
+                  font='Noto Sans Symbols 2')
+    drawLabel('Auto Correct', left + 75, 450, size=16,
               font='Canela Text')

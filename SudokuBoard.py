@@ -14,8 +14,11 @@ class SudokuBoard:
             for col in range(self.cols):
                 self.board[row][col].resetLegals(self)
         self.sol = self.solveBoard(self.board)
-        # for line in self.sol: # TODO: prints the generated solution for testing purposes
-        #     print(line)
+        for row in range(self.rows):
+            for col in range(self.cols):
+                self.board[row][col].correct = self.sol[row][col]
+        for line in self.sol: # TODO: prints the generated solution for testing purposes
+            print(line)
 
     def drawBoard(self, app):
         for row in range(len(self.board)):
@@ -91,3 +94,9 @@ class SudokuBoard:
         for r in range(blockStartRow, blockStartRow + 3):
             for c in range(blockStartCol, blockStartCol + 3):
                 board[r][c].resetLegals(board)
+
+    def findOnlyOneLegalHint(self, board):
+        row, col, smallestLegals = self.findSmallestLegals(board)
+        if len(smallestLegals) == 1:
+            return row, col
+        return None
