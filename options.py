@@ -5,7 +5,8 @@ def drawSelections(app):
     left = app.boardLeft + app.boardWidth + 50
     top = app.boardTop + 60
     size = 250
-    drawRect(left, top, size, size, fill='lightGray', border='gray', borderWidth=2)
+    drawRect(left, top, size, size, fill='lightGray', border='gray', 
+             borderWidth=2)
     drawHeadings(app, left, size)
     drawNumSquares(left, top, size)
     drawHelpButton(app, left, size)

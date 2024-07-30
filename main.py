@@ -14,6 +14,7 @@ def onAppStart(app):
     app.boardTop = 50
     app.selectedBoard = None
     app.cellBorderWidth = 1
+    app.gameOver = False
 
 def main():
     # learned how to do from TP Resourcesa

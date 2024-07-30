@@ -13,9 +13,9 @@ def levels_onScreenActivate(app):
     app.highlighted = None
 
 def levels_redrawAll(app):
-    drawRect(50, 50, app.width - 100, app.height - 100, fill=app.welcomeBGColor)
+    drawRect(50, 50, app.width - 100, app.height - 100, fill=app.bgColor)
     drawLabel('Choose Level', app.width/2, 110, size=60, 
-              fill=app.welcomeColor, align='center', font='Brush Script MT')
+              fill=app.accentColor, align='center', font='Brush Script MT')
     drawButtons(app)
 
 def levels_onMousePress(app, mouseX, mouseY):
@@ -27,15 +27,16 @@ def levels_onMousePress(app, mouseX, mouseY):
                 app.selectedBoard = SudokuBoard(app.selectedBoard)
                 for row in range(app.selectedBoard.rows):
                     for col in range(app.selectedBoard.cols):
-                        app.selectedBoard.board[row][col].resetLegals(app.selectedBoard)
+                        (app.selectedBoard.board[row][col].resetLegals
+                        (app.selectedBoard))
                 setActiveScreen('play')
 
 def drawButtons(app):
     for i in range(5):
-        drawRect(app.width/2 - 110, i * 75 + 163, 220, 50, fill=rgb(119, 94, 166), 
-             border=app.welcomeColor, borderWidth=3)
-        drawLabel(app.labels[i], app.width/2, i * 75 + 187, fill=app.welcomeColor, 
-                  font='Canela Text', size=16)
+        drawRect(app.width / 2 - 110, i * 75 + 163, 220, 50, 
+                 fill=app.buttonColor, border=app.accentColor, borderWidth=3)
+        drawLabel(app.labels[i], app.width / 2, i * 75 + 187, 
+                  fill=app.accentColor, font='Canela Text', size=16)
         
 def selectBoard(app):
     if app.level == 'easy' or app.level == 'medium' or app.level == 'hard':

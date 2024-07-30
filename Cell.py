@@ -18,23 +18,31 @@ class Cell:
         cellLeft, cellTop = self.getCellLeftTop(app, self.row, self.col)
         cellWidth, cellHeight = self.getCellSize(app)
         color = None
-        illegal = False
-        incorrect = False
+        illegal = False # if there's a value on the board that makes it wrong
+        incorrect = False # if it's the incorrect value based on the solution
+        
+        # when the cell is permanently on the board, make it gray
         if self.permanent:
             color = 'gray'
+        # if the cell is highlighted with a hint and it's selected, make it a 
+        # lime green
         elif (app.highlighted != None and (app.highlighted.row, app.highlighted.
                                           col) == (self.row, self.col) and app.
                                           selection == (self.row, self.col)):
             color = rgb(128, 192, 0)
+        # if the cell is highlighted with a hint, make it green
         elif (app.highlighted != None and (app.highlighted.row, app.highlighted.
                                           col) == (self.row, self.col)):
             color = 'green'
+        # if the cell is selected, make it yellow
         elif app.selection == (self.row, self.col):
             color = 'yellow'
+
         if self.value != self.correct.value:
             incorrect = True
         if not isLegal(app.selectedBoard.board, self, self.value):
             illegal = True
+        
         drawRect(cellLeft, cellTop, cellWidth, cellHeight, fill=color, 
                  border='black', borderWidth=app.cellBorderWidth)
         if self.value != None:

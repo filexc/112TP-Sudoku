@@ -8,16 +8,12 @@ import random
 def play_onAppStart(app):
     app.selection = None
     app.nums = [[1,2,3],[4,5,6],[7,8,9]]
-    app.gameOver = False
     app.mode = 'Normal'
     app.candidateMode = 'Manual'
     app.autocorrect = False
     app.popupError = False
     app.firstTimeInState = True
     app.initTime = None
-
-def play_onScreenActivate(app):
-    app.background = 'seashell'
     
 def play_redrawAll(app):
     app.selectedBoard.drawBoard(app)
@@ -26,7 +22,7 @@ def play_redrawAll(app):
 
 def play_onStep(app):
     app.gameOver = app.selectedBoard.gameIsOver(app)
-    if app.gameOver: # also if the board is the correct solution but do that later
+    if app.gameOver:
         setActiveScreen('endgame')
     # found time class/method online on 
     # https://www.geeksforgeeks.org/python-time-time-method/, 

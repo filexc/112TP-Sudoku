@@ -4,9 +4,9 @@ def endgame_onScreenActivate(app):
     app.gameOver = False
 
 def endgame_redrawAll(app):
-    drawRect(50, 50, app.width - 100, app.height - 100, fill=app.welcomeBGColor)
-    drawLabel('You Win', app.width/2, app.height/2 - 50, size=75, fill=app.welcomeColor, 
-              font='Brush Script MT')
+    drawRect(50, 50, app.width - 100, app.height - 100, fill=app.bgColor)
+    drawLabel('You Win', app.width/2, app.height/2 - 50, size=75, 
+              fill=app.accentColor, font='Brush Script MT')
     drawReplayButton(app)
 
 def endgame_onMousePress(app, mouseX, mouseY):
@@ -14,7 +14,7 @@ def endgame_onMousePress(app, mouseX, mouseY):
         setActiveScreen('levels')
 
 def drawReplayButton(app):
-    drawRect(app.width/2 - 110, app.height/2 + 50, 220, 60, fill=rgb(119, 94, 166), 
-             border=app.welcomeColor, borderWidth=3)
-    drawLabel('play again', app.width/2, app.height/2 + 75, size=40, align='center', 
-              fill=app.welcomeColor, font='Canela Text')
+    drawRect(app.width/2 - 110, app.height/2 + 50, 220, 60, 
+             fill=app.buttonColor, border=app.accentColor, borderWidth=3)
+    drawLabel('play again', app.width/2, app.height/2 + 75, size=40, 
+              align='center', fill=app.accentColor, font='Canela Text')
