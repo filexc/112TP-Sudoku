@@ -67,6 +67,7 @@ def play_onKeyPress(app, key):
                     app.hintStep = None
                     app.highlighted = None
                 adjustLegals(app.selectedBoard)
+    welcome_onKeyPress(app, key)
 
 def adjustLegals(board):
     for row in range(board.rows):
@@ -149,3 +150,8 @@ def drawHintButton(app):
         drawLabel('Get Hint', left + width/2, 493, size=16, font='Canela Text')
     elif app.hintStep == 'Highlighted':
         drawLabel('Apply Hint', left + width/2, 493, size=16, font='Canela Text')
+
+#TODO: get rid of
+def welcome_onKeyPress(app, key):
+    if key == 's':
+        setActiveScreen('endgame')
