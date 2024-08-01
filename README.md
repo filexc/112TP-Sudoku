@@ -21,3 +21,6 @@ git clone https://github.com/filexc/112TP-Sudoku.git
 
 ## Usage
 Run the program locally on a code editor through `main.py`
+
+## Shortcut Commands
+During gameplay, the 's' key can be pressed to skip to the game over page
