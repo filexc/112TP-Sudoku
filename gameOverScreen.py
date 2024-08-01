@@ -2,6 +2,7 @@ from cmu_graphics import *
 
 def endgame_onScreenActivate(app):
     app.gameOver = False
+    print('\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
 
 def endgame_redrawAll(app):
     drawRect(50, 50, app.width - 100, app.height - 100, fill=app.bgColor)

@@ -61,13 +61,13 @@ class SudokuBoard:
         for val in legals:
             board[row][col].value = val
             oldLegals = board[row][col].legals
-            self.resetBoardLegals(board, row, col)
+            self.resetAffectedBoardLegals(board, row, col)
             posSol = self.backtracker(board)
             if posSol != None:
                 return posSol
             board[row][col].value = None
             board[row][col].legals = oldLegals
-            self.resetBoardLegals(board, row, col)
+            self.resetAffectedBoardLegals(board, row, col)
         return None
         
     def findSmallestLegals(self, board):
@@ -84,7 +84,7 @@ class SudokuBoard:
                             return smallestRow, smallestCol, smallestLegals
         return smallestRow, smallestCol, smallestLegals
     
-    def resetBoardLegals(self, board, row, col):
+    def resetAffectedBoardLegals(self, board, row, col):
         blockStartRow = row//3 * 3
         blockStartCol = col//3 * 3
 
