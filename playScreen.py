@@ -135,7 +135,7 @@ def clickHintButton(app, mouseX, mouseY, board):
         elif app.hintStep == 'Highlighted':
             row, col = app.highlighted.row, app.highlighted.col
             board[row][col].value = board[row][col].correct.value
-            app.selectedBoard.resetBoardLegals(board, row, col)
+            app.selectedBoard.resetAffectedBoardLegals(board, row, col)
             app.hintStep = None
             app.highlighted = None
 
