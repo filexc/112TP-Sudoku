@@ -22,7 +22,9 @@ class Cell:
         incorrect = False # if it's the incorrect value based on the solution
         
         # when the cell is permanently on the board, make it gray
-        if self.permanent:
+        if self.permanent and app.selection == (self.row, self.col):
+            color = rgb(128, 118, 64)
+        elif self.permanent:
             color = 'gray'
         # if the cell is highlighted with a hint and it's selected, make it a 
         # lime green

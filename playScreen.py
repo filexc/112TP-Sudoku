@@ -3,8 +3,6 @@ from cmu_graphics import *
 from SudokuBoard import *
 from options import *
 
-import random
-
 def play_onAppStart(app):
     app.selection = None
     app.nums = [[1,2,3],[4,5,6],[7,8,9]]
@@ -51,22 +49,31 @@ def play_onMousePress(app, mouseX, mouseY):
 def play_onKeyPress(app, key):
     board = app.selectedBoard.board
     if app.selection != None:
+        if key == 'up' and app.selection[0] - 1 >= 0:
+            app.selection = app.selection[0] - 1, app.selection[1]
+        elif key == 'down' and app.selection[0] + 1 < app.rows:
+            app.selection = app.selection[0] + 1, app.selection[1]
+        elif key == 'left' and app.selection[1] - 1 >= 0:
+            app.selection = app.selection[0], app.selection[1] - 1
+        elif key == 'right' and app.selection[1] + 1 < app.cols:
+            app.selection = app.selection[0], app.selection[1] + 1
         val = None
-        for i in range(1, 10):
-            if key == str(i):
-                val = key
-                row, col = app.selection
-                if app.mode == 'Normal':
-                    board[row][col].value = int(val)
-                elif app.mode == 'Candidate':
-                    if (int(val) not in board[row][col].userCandidates):
-                        board[row][col].userCandidates.append(int(val))
-                    else:
-                        board[row][col].userCandidates.remove(int(val))
-                if app.highlighted == board[row][col]:
-                    app.hintStep = None
-                    app.highlighted = None
-                adjustLegals(app.selectedBoard)
+        if not board[app.selection[0]][app.selection[1]].permanent:
+            for i in range(1, 10):
+                if key == str(i):
+                    val = key
+                    row, col = app.selection
+                    if app.mode == 'Normal':
+                        board[row][col].value = int(val)
+                    elif app.mode == 'Candidate':
+                        if (int(val) not in board[row][col].userCandidates):
+                            board[row][col].userCandidates.append(int(val))
+                        else:
+                            board[row][col].userCandidates.remove(int(val))
+                    if app.highlighted == board[row][col]:
+                        app.hintStep = None
+                        app.highlighted = None
+                    adjustLegals(app.selectedBoard)
     welcome_onKeyPress(app, key)
 
 def adjustLegals(board):
@@ -93,7 +100,7 @@ def selectCell(app, board, mouseX, mouseY):
 
 def useNumPad(app, board, mouseX, mouseY):
     num = getNum(app, mouseX, mouseY)
-    if num != None and app.selection != None:
+    if num != None and app.selection != None and not board[app.selection[0]][app.selection[1]].permanent:
         row, col = app.selection
         if app.mode == 'Normal':
           board[row][col].value = num

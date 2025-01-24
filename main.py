@@ -17,7 +17,7 @@ def onAppStart(app):
     app.gameOver = False
 
 def main():
-    # learned how to do from TP Resourcesa
+    # learned how to do from TP Resources
     runAppWithScreens(initialScreen='welcome', width=900, height=600)
 
 main()
