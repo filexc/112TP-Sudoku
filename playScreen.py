@@ -134,7 +134,7 @@ def clickHintButton(app, mouseX, mouseY, board):
     if 600 <= mouseX <= 850 and 473 <= mouseY <= 513:
         if app.hintStep == None:
             if app.selectedBoard.findHints(board) != None:
-                row, col = app.selectedBoard.findHints(board)
+                row, col, app.hintType = app.selectedBoard.findHints(board)
                 app.highlighted = board[row][col]
                 app.hintStep = 'Highlighted'
             else:
@@ -145,6 +145,7 @@ def clickHintButton(app, mouseX, mouseY, board):
             app.selectedBoard.resetAffectedBoardLegals(board, row, col)
             app.hintStep = None
             app.highlighted = None
+            app.hintType = None
 
 def drawHintButton(app):
     left = app.boardLeft + app.boardWidth + 50

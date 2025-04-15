@@ -27,15 +27,35 @@ class Cell:
         elif self.permanent:
             color = 'gray'
         # if the cell is highlighted with a hint and it's selected, make it a 
-        # lime green
+        # mix of yellow and green
         elif (app.highlighted != None and (app.highlighted.row, app.highlighted.
                                           col) == (self.row, self.col) and app.
                                           selection == (self.row, self.col)):
-            color = rgb(128, 192, 0)
+            color = rgb(199, 222, 72)
         # if the cell is highlighted with a hint, make it green
         elif (app.highlighted != None and (app.highlighted.row, app.highlighted.
                                           col) == (self.row, self.col)):
-            color = 'green'
+            color = 'darkSeaGreen'
+        # if the cell is highlighted with a row hint aid and it's selected, make
+        # it a mix of the hint aid color and yellow
+        elif (app.hintType == "Row Single" and (app.highlighted.row == self.row)
+                                                and app.selection == (self.row, 
+                                                                      self.col)):
+            color = rgb(236, 249, 108)
+        # if the cell is highlighted with a row hint aid make it hint aid green
+        elif app.hintType == "Row Single" and app.highlighted.row == self.row:
+            color = rgb(216, 242, 216)
+        # if the cell is highlighted with a col hint aid and it's selected, make
+        # it a mix of the hint aid color and yellow
+        elif (app.hintType == "Col Single" and (app.highlighted.col == self.col)
+                                                and app.selection == (self.row, 
+                                                                      self.col)):
+            color = rgb(236, 249, 108)
+        # if the cell is highlighted with a col hint aid make it hint aid green
+        elif app.hintType == "Col Single" and app.highlighted.col == self.col:
+            color = rgb(216, 242, 216)
+        # TODO: figure out the block single highlighting it wont be as simple as the other two
+        # elif app.hintType == "Block Single" and app.
         # if the cell is selected, make it yellow
         elif app.selection == (self.row, self.col):
             color = 'yellow'

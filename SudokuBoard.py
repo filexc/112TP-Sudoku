@@ -101,7 +101,7 @@ class SudokuBoard:
     def findOnlyOneLegalHint(self, board):
         row, col, smallestLegals = self.findSmallestLegals(board)
         if len(smallestLegals) == 1:
-            return row, col
+            return row, col, "Only Legal"
         return None
     
     def findHints(self, board):
@@ -109,7 +109,10 @@ class SudokuBoard:
         if hint != None:
             return hint
         hint = self.findHiddenSingleHint(board)
-        return hint
+        if hint != None:
+            print(hint)
+            return hint
+        return None
     
     def findHiddenSingleHint(self, board):
         # Check each row
@@ -119,7 +122,7 @@ class SudokuBoard:
                 if len(cells) == 1:
                     cell = cells[0] #this is because there is only one cell for this value in the dictionary, therefore we get the 0th position
                     # print("row single", val)
-                    return cell.row, cell.col
+                    return cell.row, cell.col, "Row Single"
 
         # Check each column
         for col in range(len(board[0])):
@@ -128,7 +131,7 @@ class SudokuBoard:
                 if len(cells) == 1:
                     cell = cells[0] #this is because there is only one cell for this value in the dictionary, therefore we get the 0th position
                     # print("col single", val)
-                    return cell.row, cell.col
+                    return cell.row, cell.col, "Col Single"
 
         # Check each 3x3 box
         for boxRow in range(0, len(board), int(sqrt(len(board)))):
@@ -141,7 +144,7 @@ class SudokuBoard:
                     if len(cells) == 1:
                         cell = cells[0] #this is because there is only one cell for this value in the dictionary, therefore we get the 0th position
                         # print("block single", val)
-                        return cell.row, cell.col
+                        return cell.row, cell.col, "Block Single"
         return None
 
 
