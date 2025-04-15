@@ -1,3 +1,4 @@
+from math import sqrt
 from cmu_graphics import *
 from Cell import *
 import copy
@@ -96,9 +97,60 @@ class SudokuBoard:
             for c in range(blockStartCol, blockStartCol + 3):
                 board[r][c].resetLegals(board)
 
+    
     def findOnlyOneLegalHint(self, board):
         row, col, smallestLegals = self.findSmallestLegals(board)
         if len(smallestLegals) == 1:
             return row, col
         return None
-    #TODO: make it so the hint also appears if there's only one of a value in a row, col, or box
+    
+    def findHints(self, board):
+        hint = self.findOnlyOneLegalHint(board)
+        if hint != None:
+            return hint
+        hint = self.findHiddenSingleHint(board)
+        return hint
+    
+    def findHiddenSingleHint(self, board):
+        # Check each row
+        for row in range(len(board)):
+            counts = self.countLegalValues([board[row][col] for col in range(len(board[row]))])
+            for val, cells in counts.items():
+                if len(cells) == 1:
+                    cell = cells[0] #this is because there is only one cell for this value in the dictionary, therefore we get the 0th position
+                    # print("row single", val)
+                    return cell.row, cell.col
+
+        # Check each column
+        for col in range(len(board[0])):
+            counts = self.countLegalValues([board[row][col] for row in range(len(board))])
+            for val, cells in counts.items():
+                if len(cells) == 1:
+                    cell = cells[0] #this is because there is only one cell for this value in the dictionary, therefore we get the 0th position
+                    # print("col single", val)
+                    return cell.row, cell.col
+
+        # Check each 3x3 box
+        for boxRow in range(0, len(board), int(sqrt(len(board)))):
+            for boxCol in range(0, len(board[boxRow]), int(sqrt(len(board[boxRow])))):
+                block = [board[row][col]
+                        for row in range(boxRow, boxRow + int(sqrt(len(board))))
+                        for col in range(boxCol, boxCol + int(sqrt(len(board[row]))))]
+                counts = self.countLegalValues(block)
+                for val, cells in counts.items():
+                    if len(cells) == 1:
+                        cell = cells[0] #this is because there is only one cell for this value in the dictionary, therefore we get the 0th position
+                        # print("block single", val)
+                        return cell.row, cell.col
+        return None
+
+
+    def countLegalValues(self, cells):
+        counts = {}
+        for cell in cells:
+            if cell.value == None:
+                for val in cell.legals:
+                    if val not in counts:
+                        counts[val] = []
+                    counts[val].append(cell)
+        return counts

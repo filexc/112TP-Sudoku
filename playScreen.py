@@ -133,8 +133,8 @@ def toggleAutocorrect(app, mouseX, mouseY):
 def clickHintButton(app, mouseX, mouseY, board):
     if 600 <= mouseX <= 850 and 473 <= mouseY <= 513:
         if app.hintStep == None:
-            if app.selectedBoard.findOnlyOneLegalHint(board) != None:
-                row, col = app.selectedBoard.findOnlyOneLegalHint(board)
+            if app.selectedBoard.findHints(board) != None:
+                row, col = app.selectedBoard.findHints(board)
                 app.highlighted = board[row][col]
                 app.hintStep = 'Highlighted'
             else:
