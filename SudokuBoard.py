@@ -101,3 +101,4 @@ class SudokuBoard:
         if len(smallestLegals) == 1:
             return row, col
         return None
+    #TODO: make it so the hint also appears if there's only one of a value in a row, col, or box
