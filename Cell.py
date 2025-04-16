@@ -11,6 +11,7 @@ class Cell:
         self.col = col
         self.legals = []
         self.userCandidates = []
+        self.manuallyRemovedCandidates = set()
         self.correct = None
     
     def drawCell(self, app, row, col):
@@ -56,7 +57,7 @@ class Cell:
             color = rgb(216, 242, 216)
         # if the cell is highlighted with a block hint aid and it's selected,
         # make it a mix of the hint aid color and yellow
-        elif app.hintType == "Block Single":
+        elif app.hintType == "Block Single" and app.selection == (self.row, self.col):
             hRow = app.highlighted.row
             hCol = app.highlighted.col
             row = self.row
@@ -132,15 +133,42 @@ class Cell:
     def resetLegals(self, board):
         if isinstance(board, SudokuBoard.SudokuBoard):
             board = board.board
-        self.userCandidates = (self.userCandidates if app.candidateMode == 
-                               'Manual' else self.legals)
-        #TODO: figure out how to only create the duplicate once for candidates
-        #      so that the user can adjust the candidates, but it will still
-        #      auto update
+
+        # Recalculate legal values
         self.legals.clear()
-        for i in range (1, 10):
+        for i in range(1, 10):
             if isLegal(board, self, i):
                 self.legals.append(i)
+
+        # Update userCandidates based on mode
+        if app.candidateMode == 'Automatic':
+            if self.userCandidates == []:
+                self.userCandidates = self.legals.copy()
+            else:
+                # Keep user-removed candidates while syncing with new legals
+                self.userCandidates = [
+                    candidate for candidate in self.userCandidates if candidate in self.legals
+                ]
+
+                for legal in self.legals:
+                    if legal not in self.userCandidates and legal not in self.manuallyRemovedCandidates:
+                        self.userCandidates.append(legal)
+                self.userCandidates = sorted(self.userCandidates)
+        else:
+            # In Manual mode, userCandidates remain unchanged
+            self.userCandidates = self.userCandidates or []
+
+    def removeCandidate(self, candidate):
+        if candidate in self.userCandidates:
+            self.userCandidates.remove(candidate)
+            self.manuallyRemovedCandidates.add(candidate)
+        print("user candidates: ",self.userCandidates)
+        print("legals: ", self.legals)
+    
+    def addCandidate(self, candidate):        
+        if candidate not in self.userCandidates:
+            self.userCandidates.append(candidate)
+            self.manuallyRemovedCandidates.discard(candidate)
     
     def displayLegals(self, app, row, col):
         cellWidth, cellHeight = self.getCellSize(app)

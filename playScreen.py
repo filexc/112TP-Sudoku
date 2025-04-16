@@ -66,10 +66,16 @@ def play_onKeyPress(app, key):
                     if app.mode == 'Normal':
                         board[row][col].value = int(val)
                     elif app.mode == 'Candidate':
-                        if (int(val) not in board[row][col].userCandidates):
-                            board[row][col].userCandidates.append(int(val))
-                        else:
-                            board[row][col].userCandidates.remove(int(val))
+                        if app.candidateMode == 'Manual':
+                            if (int(val) not in board[row][col].userCandidates):
+                                board[row][col].userCandidates.append(int(val))
+                            else:
+                                board[row][col].userCandidates.remove(int(val))
+                        elif app.candidateMode == "Automatic":
+                            if (int(val) not in board[row][col].userCandidates):
+                                board[row][col].addCandidate(int(val))
+                            else:
+                                board[row][col].removeCandidate(int(val))
                     if app.highlighted == board[row][col]:
                         app.hintStep = None
                         app.highlighted = None
@@ -105,10 +111,16 @@ def useNumPad(app, board, mouseX, mouseY):
         if app.mode == 'Normal':
           board[row][col].value = num
         elif app.mode == 'Candidate':
-            if (num not in board[row][col].userCandidates):
-                board[row][col].userCandidates.append(num)
-            else:
-                board[row][col].userCandidates.remove(num)
+            if app.candidateMode == 'Manual':
+                if (num not in board[row][col].userCandidates):
+                    board[row][col].userCandidates.append(num)
+                else:
+                    board[row][col].userCandidates.remove(num)
+            elif app.candidateMode == "Automatic":
+                if (num not in board[row][col].userCandidates):
+                    board[row][col].addCandidate(num)
+                else:
+                    board[row][col].removeCandidate(num)
         if app.highlighted == board[row][col]:
             app.hintStep = None
             app.highlighted = None
