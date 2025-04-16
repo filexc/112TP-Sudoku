@@ -54,8 +54,34 @@ class Cell:
         # if the cell is highlighted with a col hint aid make it hint aid green
         elif app.hintType == "Col Single" and app.highlighted.col == self.col:
             color = rgb(216, 242, 216)
-        # TODO: figure out the block single highlighting it wont be as simple as the other two
-        # elif app.hintType == "Block Single" and app.
+        # if the cell is highlighted with a block hint aid and it's selected,
+        # make it a mix of the hint aid color and yellow
+        elif app.hintType == "Block Single":
+            hRow = app.highlighted.row
+            hCol = app.highlighted.col
+            row = self.row
+            col = self.col
+            if (((hRow % 3 == 0 and (row == hRow or row == hRow + 1 or row == hRow + 2)) 
+                or (hRow % 3 == 1) and (row == hRow - 1 or row == hRow or row == hRow + 1)
+                or (hRow % 3 == 2) and (row == hRow - 2 or row == hRow - 1 or row == hRow)) 
+                and ((hCol % 3 == 0 and (col == hCol or col == hCol + 1 or col == hCol + 2)) 
+                or (hCol % 3 == 1) and (col == hCol - 1 or col == hCol or col == hCol + 1)
+                or (hCol % 3 == 2) and (col == hCol - 2 or col == hCol - 1 or col == hCol))):
+                color = rgb(236, 249, 108)
+        # if the cell is hihglighted with a block hint aid, make it hint aid green
+        elif app.hintType == "Block Single":
+            hRow = app.highlighted.row
+            hCol = app.highlighted.col
+            row = self.row
+            col = self.col
+            if (((hRow % 3 == 0 and (row == hRow or row == hRow + 1 or row == hRow + 2)) 
+                or (hRow % 3 == 1) and (row == hRow - 1 or row == hRow or row == hRow + 1)
+                or (hRow % 3 == 2) and (row == hRow - 2 or row == hRow - 1 or row == hRow)) 
+                and ((hCol % 3 == 0 and (col == hCol or col == hCol + 1 or col == hCol + 2)) 
+                or (hCol % 3 == 1) and (col == hCol - 1 or col == hCol or col == hCol + 1)
+                or (hCol % 3 == 2) and (col == hCol - 2 or col == hCol - 1 or col == hCol))):
+                color = rgb(216, 242, 216)
+        
         # if the cell is selected, make it yellow
         elif app.selection == (self.row, self.col):
             color = 'yellow'
