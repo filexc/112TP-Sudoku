@@ -162,8 +162,6 @@ class Cell:
         if candidate in self.userCandidates:
             self.userCandidates.remove(candidate)
             self.manuallyRemovedCandidates.add(candidate)
-        print("user candidates: ",self.userCandidates)
-        print("legals: ", self.legals)
     
     def addCandidate(self, candidate):        
         if candidate not in self.userCandidates:
